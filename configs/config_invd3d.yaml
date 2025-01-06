@@ -6,7 +6,6 @@ project: "DocDewarp"  # wandb 项目名称
 
 # ===== 数据集配置 =====
 data_path: "/data/inv3d/train/"  # 数据集路径
-image_size: 288  # 输入图像的大小
 patch_size: 128
 in_chans: 3  # 输入图像的通道数
 num_classes: 3  # 分类任务的类别数量

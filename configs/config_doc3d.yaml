@@ -12,8 +12,8 @@ num_classes: 3  # 分类任务的类别数量
 num_workers: 8  # 用于数据加载的并行线程数
 
 # ===== 模型配置 =====
-model_name: "resnet18d.ra2_in1k"  # 使用的模型名称
-pretrained: True
+model_name: "geotr"  # 使用的模型名称
+pretrained: null
 resume: null  # 模型恢复的 checkpoint 路径
 
 # ===== 优化器配置 =====

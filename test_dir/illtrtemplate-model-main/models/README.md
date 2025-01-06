@@ -1,1 +1,0 @@
-Models will be automatically downloaded and placed in this folder.

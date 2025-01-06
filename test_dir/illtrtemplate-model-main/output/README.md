@@ -1,1 +1,0 @@
-Ouput files will be placed inside this directory.
