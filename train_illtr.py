@@ -12,7 +12,7 @@ torch.set_float32_matmul_precision("high")
 
 
 if __name__ == "__main__":
-    opt = get_option("config_invd3d.yaml")
+    opt = get_option("config_illtr_Inv3D.yaml")
     """定义网络"""
 
     model = get_IllTr()
