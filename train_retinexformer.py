@@ -1,8 +1,11 @@
+'''
+retinexformer 训练代码
+'''
 import torch
 from configs.option import get_option
-from tools.datasets.datasets_invd3d.datasets import *
-from tools.pl_tools.pl_tool_illtr import *
-from models import get_IllTr
+from tools.datasets.datasets_doc3dshade.datasets_docres import *
+from tools.pl_tools.pl_tool_docres_retinexformer import *
+from models import RetinexFormer
 import lightning.pytorch as pl
 from lightning.pytorch.loggers import WandbLogger
 import wandb
@@ -12,10 +15,9 @@ torch.set_float32_matmul_precision("high")
 
 
 if __name__ == "__main__":
-    opt = get_option("config_illtr_Inv3D.yaml")
+    opt = get_option("config_retinexformer_doc3dshade.yaml")
     """定义网络"""
-
-    model = get_IllTr()
+    model = RetinexFormer(in_channels=3, out_channels=3, n_feat=40, stage=1, num_blocks=[1,2,2]).cuda()
     """模型编译"""
     # model = torch.compile(model)
     """导入数据集"""
@@ -44,11 +46,11 @@ if __name__ == "__main__":
         callbacks=[
             pl.callbacks.ModelCheckpoint(
                 dirpath=os.path.join("./checkpoints", opt.exp_name),
-                monitor="loss/valid_loss",
+                monitor="loss/val_loss",
                 mode="min",
                 save_top_k=1,
                 save_last=False,
-                filename="epoch_{epoch}-loss_{loss/valid_loss:.3f}",
+                filename="epoch_{epoch}-loss_{loss/val_loss:.3f}",
                 auto_insert_metric_name=False,  # 使用 f-string 和 replace
             ),
         ],

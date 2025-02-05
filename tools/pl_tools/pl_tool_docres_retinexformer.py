@@ -1,12 +1,11 @@
+'''
+docres 和 retinexformer 通用的pl_tool训练代码
+'''
 import torch
-
-from torchmetrics import ConfusionMatrix, F1Score
 import lightning.pytorch as pl
 import torch.nn.functional as F
 from pytorch_msssim import ssim, ms_ssim
-from .losses.vgg_pretrained_loss import VGGPerceptualLoss
-from .utils import load_model
-
+from torchmetrics import TotalVariation
 from torchvision.utils import make_grid
 import itertools
 import wandb
@@ -23,15 +22,8 @@ class LightningModule(pl.LightningModule):
         self.opt = opt  # 配置参数
         self.model = model  # 模型
         self.l1_loss_fn = torch.nn.L1Loss()
-        self.vgg = VGGPerceptualLoss()
-        self.alpha = 1e-5
 
-        if opt.pretrained:
-            print("-" * 30)
-            msg = load_model(self.model, opt.pretrained)
-            print(f"pretrained model loading: {msg}")
-            print("-" * 30)
-
+        self.gamma1 = 0.1
 
     def forward(self, data, **kwargs):
         image = data["image"]
@@ -62,33 +54,38 @@ class LightningModule(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         """训练步骤"""
-        image, label = (batch["image"], batch["label"])
-        prediction = self.model(image)  # 前向传播
+        image, label= (batch["image"], batch["label"])
+        out = self.model(image)  # 前向传播
+        
+        ssim_loss = self.gamma1 * (1 - ssim(out, label, data_range=1.0))
+        l1_loss = self.l1_loss_fn(out, label)
 
-        l1_loss = self.l1_loss_fn(prediction, label)
-        vgg_loss = self.vgg(prediction, label)
-        loss = l1_loss + self.alpha * vgg_loss
+
+        loss = l1_loss + ssim_loss
         self.log("loss/train_l1_loss", l1_loss) 
-        self.log("loss/train_vgg_loss", vgg_loss)
+        self.log("loss/train_ssim_loss", ssim_loss)
         self.log("loss/train_loss", loss)  # 记录训练损失
         self.log("trainer/learning_rate", self.optimizer.param_groups[0]["lr"])
         if batch_idx == 0:
-            self.log_images(image, prediction, label, tag="visual/train", limit_samples=8)
+            self.log_images(image, out, label, tag="visual/train", limit_samples=4)
         return loss
+    
 
     def validation_step(self, batch, batch_idx):
         """验证步骤"""
-        image, label = (batch["image"], batch["label"])
-        prediction = self.model(image)  # 前向传播
+        image, label= (batch["image"], batch["label"])
+        out = self.model(image)  # 前向传播
+        
+        ssim_loss = self.gamma1 * (1 - ssim(out, label, data_range=1.0))
+        l1_loss = self.l1_loss_fn(out, label)
 
-        l1_loss = self.l1_loss_fn(prediction, label)
-        vgg_loss = self.vgg(prediction, label)
-        loss = l1_loss + self.alpha * vgg_loss
+        loss = l1_loss + ssim_loss
         self.log("loss/val_l1_loss", l1_loss) 
-        self.log("loss/val_vgg_loss", vgg_loss)
-        self.log("loss/valid_loss", loss)  # 记录训练损失
+        self.log("loss/val_ssim_loss", ssim_loss)
+        self.log("loss/val_loss", loss)  # 记录训练损失
         if batch_idx == 0:
-            self.log_images(image, prediction, label, tag="visual/val", limit_samples=8)
+            self.log_images(image, out, label, tag="visual/val", limit_samples=4)
+        return loss
 
     def on_train_epoch_end(self):
         """训练周期结束时执行"""
@@ -108,7 +105,7 @@ class LightningModule(pl.LightningModule):
     ):
 
         if limit_samples:
-            images_input = images_input[:limit_samples]
+            images_input = images_input[:limit_samples][:,0:3,:,:]
             images_output = images_output[:limit_samples]
             albedo = albedo[:limit_samples]
 

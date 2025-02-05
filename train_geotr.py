@@ -1,7 +1,7 @@
 import torch
 from configs.option import get_option
-from tools.datasets.datasets import *
-from tools.pl_tool_geotr import *
+from tools.datasets.datasets_doc3d.datasets import *
+from tools.pl_tools.pl_tool_geotr import *
 from models import GeoTr
 import lightning.pytorch as pl
 from lightning.pytorch.loggers import WandbLogger

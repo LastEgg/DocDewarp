@@ -3,7 +3,7 @@ import numpy as np
 import hdf5storage as h5
 from concurrent.futures import ThreadPoolExecutor
 from configs.option import get_option
-from .augments import train_transform, valid_transform
+from .augments import get_transform
 import os
 import random
 import cv2
@@ -274,6 +274,7 @@ class Dataset(torch.utils.data.Dataset):
 
 
 def get_dataloader(opt):
+    train_transform, valid_transform = get_transform(opt)
     train_dataset = Dataset(
         phase="train_gdx",
         opt=opt,
