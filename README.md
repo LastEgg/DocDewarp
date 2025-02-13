@@ -1,5 +1,8 @@
 ## 简介
 这是一个基于PyTorch Lightning构建的文档矫正与文档增强的训练框架，用于复现各种文档矫正与增强的论文，以及一些属于自己的创新.
+<img src="test_dir/vis/1.jpg" alt="示例图片" width="400"/>
+<img src="test_dir/vis/2.jpg" alt="示例图片" width="400"/>
+<img src="test_dir/vis/3.jpg" alt="示例图片" width="400"/>
 
 ## 主要特性
 - 使用 PyTorch Lightning 构建，代码结构清晰
