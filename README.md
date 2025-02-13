@@ -43,7 +43,7 @@
 | --- | --- | --- | --- | --- |
 | DocTr++ | config_geotr_Doc3D.yaml | Doc3D | <ul><li>已完成</li></ul> | dewarp |
 | IllTr from DocTr | config_illtr_Inv3D.yaml | Inv3D | <ul><li>由于面对大分辨率图片推理成本过高，后续不再更新</li></ul> | enhancement |
-| **drnet_gdx** | config_drnet_doc3dshade.yaml | Doc3dShade | <ul><li>已完成：弃用了原文的gcnet，替换为docres的prompt图片预处理方式</li><li>弃用了TV Loss</li></ul> | enhancement |
+| **drnet_egg** | config_drnet_doc3dshade.yaml | Doc3dShade | <ul><li>已完成：弃用了原文的gcnet，替换为docres的prompt图片预处理方式</li><li>弃用了TV Loss</li></ul> | enhancement |
 | Retinexformer | config_retinexformer_doc3dshade.yaml | Doc3dShade | <ul><li>已完成，但面对模糊图片与某些情况会出现大面空白的情况</li></ul> | enhancement |
 
 
