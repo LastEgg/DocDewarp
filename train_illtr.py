@@ -1,3 +1,6 @@
+'''
+illtr 训练代码
+'''
 import torch
 from configs.option import get_option
 from tools.datasets.datasets_invd3d.datasets import *

@@ -13,6 +13,7 @@ class Dataset(torch.utils.data.Dataset):
         self.data_path = opt.data_path
         self.augmentation = train_transform if "train" in phase else valid_transform
         self.image_size = opt.image_size 
+        self.prompt = prompt
 
         path = os.path.join(self.data_path, phase + ".txt")
         with open(path, "r") as f:
@@ -29,7 +30,7 @@ class Dataset(torch.utils.data.Dataset):
             label = cv2.imread(label_path)
             label,cap_im = self.randomcrop_realdataset(label,cap_im)
             cap_im = self.appearance_randomAugmentv1(cap_im)
-            enhance_result = self.appearance_dtsprompt(cap_im)
+            
         else:
             label_path = os.path.join(self.data_path, "label", image_name)
             bleed_path = os.path.join(self.data_path, "label",random.choice(self.bleed_list))
@@ -45,7 +46,7 @@ class Dataset(torch.utils.data.Dataset):
 
             
             cap_im = self.appearance_randomAugmentv2(cap_im,shadow_im)
-            enhance_result = self.appearance_dtsprompt(cap_im)
+            
 
         label_2x, label_4x, label_8x = self.downsample_label(label)
 
@@ -55,9 +56,10 @@ class Dataset(torch.utils.data.Dataset):
         label_2x = self.rgbim_transform(label_2x)
         label_4x = self.rgbim_transform(label_4x)
         label_8x = self.rgbim_transform(label_8x)
-
-        dtsprompt = self.rgbim_transform(enhance_result)
-        image = torch.cat((image,dtsprompt),0)
+        if self.prompt:
+            enhance_result = self.appearance_dtsprompt(cap_im)
+            dtsprompt = self.rgbim_transform(enhance_result)
+            image = torch.cat((image,dtsprompt),0)
         
 
         return {"image": image, "label": label,  "label_2x": label_2x, "label_4x": label_4x, "label_8x": label_8x,

@@ -161,4 +161,4 @@ if __name__ == '__main__':
     # cv2.imwrite("temp.jpg",out_im)
     # end = time.time()
     # print(f"推理时间为：{end - start}")
-    infer_folders(model, "/root/gdx/DocDewarp/test_dir/img", "/root/gdx/DocDewarp/test_dir/out")
+    infer_folders(model, "./test_dir/img", "./test_dir/out")

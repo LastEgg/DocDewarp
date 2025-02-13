@@ -1,3 +1,6 @@
+'''
+drnet 训练代码
+'''
 import torch
 from configs.option import get_option
 from tools.datasets.datasets_doc3d.datasets import *
@@ -7,7 +10,7 @@ import lightning.pytorch as pl
 from lightning.pytorch.loggers import WandbLogger
 import wandb
 import os
-
+os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
 torch.set_float32_matmul_precision("high")
 
 

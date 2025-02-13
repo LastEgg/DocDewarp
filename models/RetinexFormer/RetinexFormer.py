@@ -314,7 +314,6 @@ class Denoiser(nn.Module):
                 torch.cat([fea, fea_encoder[self.level - 1 - i]], dim=1))
             illu_fea = illu_fea_list[self.level-1-i]
             fea = LeWinBlcok(fea,illu_fea)
-            print(f"fea shape: {fea.shape}")
 
         # Mapping
         out = self.mapping(fea) + x
@@ -359,18 +358,6 @@ class RetinexFormer(nn.Module):
         out = self.body(x)
 
         return out
-    # def forward(self, x):
-    #     """
-    #     x: [b,c,h,w]
-    #     return outputs: list of tensors from each stage
-    #     """
-    #     outputs = []
-    #     for idx, layer in enumerate(self.body):
-    #         x = layer(x)
-    #         print(f"Output of stage {idx + 1}: shape = {x.shape}")  # 打印每个阶段的输出形状
-    #         outputs.append(x)
-        
-    #     return outputs
 
 
 if __name__ == '__main__':

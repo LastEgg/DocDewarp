@@ -1,0 +1,30 @@
+# ===== 实验环境配置 =====
+seed: 42  # 随机种子，用于确保实验的可重复性
+exp_name: "baseline_retinexformer_V1.0"  # 实验名称
+save_wandb: true  # 是否将训练过程的指标保存到 wandb
+project: "DocDewarp"  # wandb 项目名称
+
+# ===== 数据集配置 =====
+data_path: "/data/Doc3Dshade/"  # 数据集路径
+image_size: 256  # 输入图像的大小
+num_workers: 8  # 用于数据加载的并行线程数
+
+# ===== 模型配置 =====
+model_name: "retinexformer"  # 使用的模型名称
+pretrained: null
+resume: null  # 模型恢复的 checkpoint 路径
+# ===== 优化器配置 =====
+learning_rate: 0.0001  # 学习率
+weight_decay: 0.05  # 权重衰减系数，用于防止过拟合
+
+# ===== 训练配置 =====
+batch_size: 16  # 批次大小
+epochs: 100  # 训练的总轮数
+devices: 3  # 使用的 GPU 设备 ID，一般不使用多卡，使用多卡修改为列表 [0, 1]
+precision: "32"  # 训练使用的精度模式，常见选择包括 32，16，bf16-mixed
+gradient_clip_val: 1000000.0  # 梯度裁剪的最大值，用于防止梯度爆炸，默认不使用
+accumulate_grad_batches: 1  # 梯度累积的 batch 数，用于模拟更大的 batch size，默认不使用
+
+# ===== 监控配置 =====
+val_check: 1.0  # 验证集频率，当容易出现过拟合现象的时候可以设置较小的值找到比较好的 checkpoint
+log_step: 20  # 日志记录的频率，例如每训练 log_step 个 batch 记录一次

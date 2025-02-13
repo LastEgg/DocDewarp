@@ -13,6 +13,7 @@ def get_option(config_name, verbose=True):
         with open(yaml_path, "r", encoding="utf-8") as f:
             yaml_config = yaml.safe_load(f)
     else:
+        print("config path is not exist!")
         yaml_config = {}
 
     if verbose:

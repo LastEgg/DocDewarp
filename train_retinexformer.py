@@ -21,7 +21,7 @@ if __name__ == "__main__":
     """模型编译"""
     # model = torch.compile(model)
     """导入数据集"""
-    train_dataloader, valid_dataloader = get_dataloader(opt)
+    train_dataloader, valid_dataloader = get_dataloader(opt, prompt=False)
     """Lightning 模块定义"""
     wandb_logger = WandbLogger(
         project=opt.project,
