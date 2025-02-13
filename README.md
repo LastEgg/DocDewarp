@@ -42,7 +42,7 @@ pip install -U albumentations opencv-contrib-python jupyter matplotlib lightning
 - [x] 新增模糊增强与噪音增强(enhancement任务)
 - [ ] 新增export_retinexformer.py 和 export_geotr.py
 - [ ] 新增复现的原文链接与原代码链接
-- [ ] 新增百度商业接口与本文SOTA(drnet_gdx)的对比结果
+- [ ] 新增百度商业接口与本文SOTA(drnet_egg)的对比结果
 
 ## 已有方法
 | **方法名称** | **配置文件** | **数据集** | **备注** | **任务类型** |
