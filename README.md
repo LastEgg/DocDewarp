@@ -18,6 +18,11 @@
 - 支持混合精度训练
 - 自动记录训练指标
 
+## 环境安装
+```bash
+pip install -U albumentations opencv-contrib-python jupyter matplotlib lightning wandb einops pandas scikit-learn datasets transformers kornia bitsandbytes peft timm openvino nncf lightgbm triton torchmetrics -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+
 ## 项目结构
 - `README.md`：项目的总体说明文档。
 - `models/`：包含模型文件。
