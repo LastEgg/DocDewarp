@@ -36,13 +36,14 @@
 - [x] 新增模糊增强与噪音增强(enhancement任务)
 - [ ] 新增export_retinexformer.py 和 export_geotr.py
 - [ ] 新增复现的原文链接与原代码链接
+- [ ] 新增百度商业接口与本文SOTA(drnet_gdx)的对比结果
 
 ## 已有方法
 | **方法名称** | **配置文件** | **数据集** | **备注** | **任务类型** |
 | --- | --- | --- | --- | --- |
 | DocTr++ | config_geotr_Doc3D.yaml | Doc3D | <ul><li>已完成</li></ul> | dewarp |
 | IllTr from DocTr | config_illtr_Inv3D.yaml | Inv3D | <ul><li>由于面对大分辨率图片推理成本过高，后续不再更新</li></ul> | enhancement |
-| drnet from gcdrnet | config_drnet_doc3dshade.yaml | Doc3dShade | <ul><li>已完成：弃用了原文的gcnet，替换为docres的prompt图片预处理方式</li><li>弃用了TV Loss</li></ul> | enhancement |
+| **drnet_gdx** | config_drnet_doc3dshade.yaml | Doc3dShade | <ul><li>已完成：弃用了原文的gcnet，替换为docres的prompt图片预处理方式</li><li>弃用了TV Loss</li></ul> | enhancement |
 | Retinexformer | config_retinexformer_doc3dshade.yaml | Doc3dShade | <ul><li>已完成，但面对模糊图片与某些情况会出现大面空白的情况</li></ul> | enhancement |
 
 
