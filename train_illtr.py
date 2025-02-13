@@ -14,13 +14,11 @@ torch.set_float32_matmul_precision("high")
 if __name__ == "__main__":
     opt = get_option("config_illtr_Inv3D.yaml")
     """定义网络"""
-
     model = get_IllTr()
     """模型编译"""
     # model = torch.compile(model)
     """导入数据集"""
     train_dataloader, valid_dataloader = get_dataloader(opt)
-
     """Lightning 模块定义"""
     wandb_logger = WandbLogger(
         project=opt.project,

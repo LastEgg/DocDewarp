@@ -1,13 +1,20 @@
+'''
+用于图像增强推理
+算法支持: retinexformer、drnet
+功能支持：单张推理、文件夹推理
+'''
 import os 
 import cv2 
 import glob
 from pathlib import Path
-import utils
 import argparse
 import numpy as np
 import torch
 import time
+from tqdm import tqdm
 from models import UNext_full_resolution_padding_L_py_L, RetinexFormer
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"  
+
 
 def stride_integral(img,stride=32):
     h,w = img.shape[:2]
@@ -44,9 +51,9 @@ def appearance_prompt(img):
     result_norm = cv2.resize(result_norm,(w,h))
     return result_norm
 
-def drnet_load(model_path="./checkpoints/baseline_drnet_V1.1/epoch_83-loss_0.016.ckpt"):
+def drnet_load(model_path="/root/gdx/DocDewarp/checkpoints/baseline_drnet_V1.1/epoch_83-loss_0.016.ckpt"):
     model = UNext_full_resolution_padding_L_py_L(num_classes=3, input_channels=6,img_size=512).cuda()
-    checkpoint = torch.load(model_path)
+    checkpoint = torch.load(model_path, map_location="cpu")
     state_dict = checkpoint['state_dict']
     update_dict = {}
     for k, v in state_dict.items():
@@ -73,7 +80,6 @@ def drnet_infer(model,im_path):
     h,w = im_org.shape[:2]
     prompt = appearance_prompt(im_org)
     in_im = np.concatenate((im_org,prompt),-1)
-
 
     # constrain the max resolution 
     if max(w,h) < MAX_SIZE:
@@ -137,12 +143,22 @@ def retinexformer_infer(model,im_path):
 
     return out_im
 
+def infer_folders(model, im_folder, out_folder):
+    os.makedirs(out_folder, exist_ok=True)
+    for im_name in tqdm(os.listdir(im_folder)):
+        im_path = os.path.join(im_folder, im_name)
+        out_path = os.path.join(out_folder, im_name)
+        out_im = drnet_infer(model, im_path)
+        cv2.imwrite(out_path, out_im)
+
+
 if __name__ == '__main__':
 
     model = drnet_load()
-    im_path = "your_image_path.jpg"
-    start = time.time()
-    out_im = drnet_infer(model,im_path)
-    cv2.imwrite("temp.jpg",out_im)
-    end = time.time()
-    print(f"推理时间为：{end - start}")
+    # im_path = "/root/gdx/DocDewarp/test_dir/images/1A52177511EFC179DC987A6D1AEB0EB6_segL(1).jpg"
+    # start = time.time()
+    # out_im = drnet_infer(model,im_path)
+    # cv2.imwrite("temp.jpg",out_im)
+    # end = time.time()
+    # print(f"推理时间为：{end - start}")
+    infer_folders(model, "/root/gdx/DocDewarp/test_dir/img", "/root/gdx/DocDewarp/test_dir/out")
